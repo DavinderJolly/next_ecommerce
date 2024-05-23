@@ -1,11 +1,13 @@
 import Hello from "@/components/Hello";
 import Counter from "@/components/Counter";
+import Inventory from "@/components/Inventory";
 
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-24">
       <Hello />
       <Counter />
+      <Inventory />
     </main>
   );
 }
