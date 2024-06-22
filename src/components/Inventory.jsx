@@ -1,4 +1,5 @@
 "use client"
+import ProductCard from "./ProductCard";
 import { useEffect, useState } from "react";
 
 function Inventory() {
@@ -13,11 +14,12 @@ function Inventory() {
   return (
     <section>
       <h2 className="text-3xl">Inventory</h2>
-
-      <ul>
+      <ul className="grid grid-cols-5 gap-4">
         {products.map((product) => (
-          <li key={product.id}>{product.name}</li>
-        ))}
+          <li key={product.id}>
+            <ProductCard name={product.name} price={product.price} description={product.description} img_url={product.img_url} />
+          </li>
+          ))}
       </ul>
     </section>
   );
