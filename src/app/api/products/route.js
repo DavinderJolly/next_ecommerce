@@ -8,3 +8,11 @@ export async function GET() {
   });
   return Response.json(products);
 }
+
+export async function POST(req) {
+  const products = await req.json();
+  const result = await prisma.product.create({
+    data: products,
+  });
+  return Response.json(result);
+}
