@@ -101,9 +101,9 @@ const NavBar = ({}) => {
             onClick={toggleCart}
             className="cart cursor-pointer absolute right-0 top-4 mx-5"
           >
-            <Cart ref={ref} toggleCart={toggleCart}/>
             <AiOutlineShoppingCart className="text-white text=x1 md:text-2xl" />
           </div>
+            <Cart ref={ref} toggleCart={toggleCart}/>
         </div>
       </div>
     </nav>

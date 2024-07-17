@@ -17,7 +17,7 @@ function Inventory() {
       <ul className="grid grid-cols-5 gap-4">
         {products.map((product) => (
           <li key={product.id}>
-            <ProductCard name={product.name} price={product.price} description={product.description} img_url={product.img_url} />
+            <ProductCard name={product.name} price={product.price} description={product.description} img_url={product.img_url} id={product.id} />
           </li>
           ))}
       </ul>
