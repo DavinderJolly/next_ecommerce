@@ -25,9 +25,9 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
   // const saveCart = () => {
   //   let myCart = cart;
   //   let subt = 0;
-
+  //   localStorage.setItem("cart",JSON.stringify(myCart)
   //   let keys = Object.keys(cart);
-  //   for (let i = 0; keys.length; i++) {
+  //   for (let i = 0; i<keys.length; i++) {
   //     subt += myCart[keys[i]].price * myCart[keys[i]].qty;
   //   }
   //   setSubTotal(subt);
@@ -84,9 +84,19 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
               <div className="item flex my-5">
                 <div className="w-2/3 font-semibold">{cart[k].name}</div>
                 <div className="flex font-semibold items-center justify-center w-1/3">
-                  <FaMinus className="mx-3 cursor-pointer text-pink-500" />{" "}
+                  <FaMinus
+                    onClick={() => {
+                      removeFromCart(k, 1, cart[k].price, cart[k].name);
+                    }}
+                    className="mx-3 cursor-pointer text-pink-500"
+                  />{" "}
                   <span className="mx-2 text-sm">{cart[k].qty}</span>
-                  <FaPlus className="cursor-pointer mx-3" />
+                  <FaPlus
+                    onClick={() => {
+                      addToCart(k, 1, cart[k].price, cart[k].name);
+                    }}
+                    className="cursor-pointer mx-3"
+                  />
                 </div>
               </div>
             </li>
