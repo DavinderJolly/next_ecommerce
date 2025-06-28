@@ -23,5 +23,5 @@ model Product {
   name        String
   description String
   img_url     String
-  price       Float
+  price       Int
 }
