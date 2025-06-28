@@ -76,7 +76,7 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
       </span>
       <ol className="list-decimal font-semibold">
         {Object.keys(cart).length === 0 && (
-          <div className="my-4 text-base font-normal">No items</div>
+          <li className="my-4 text-base font-normal block">No items</li>
         )}
         {Object.keys(cart).map((k) => {
           return (
@@ -104,10 +104,15 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         })}
       </ol>
       <div className="flex">
-        <button className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm">
+         <form action="/api/checkout_sessions" method="POST">
+      <section>
+        <button type="submit" role="link" className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm">
           <BsFillBagCheckFill className="m-1" />
           Checkout
         </button>
+      </section>
+    </form>
+        
 
         <button
           onClick={clearCart}

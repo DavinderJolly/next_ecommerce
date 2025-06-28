@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import "../styles/global.css";
 import Cart from "./Cart";
+import Search from "./Search";
 
 const NavBar = ({}) => {
   const toggleCart = () => {
@@ -96,6 +97,11 @@ const NavBar = ({}) => {
                 Home
               </a>
             </li>
+          </ul>
+          <ul>
+            <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
+              <Search placeholder="Search invoices..." />
+            </div>
           </ul>
           <div
             onClick={toggleCart}
