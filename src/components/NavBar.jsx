@@ -100,7 +100,7 @@ const NavBar = ({}) => {
           </ul>
           <ul>
             <div className="mt-4 flex items-center justify-between gap-2 md:mt-8">
-              <Search placeholder="Search invoices..." />
+              {/* <Search placeholder="Search invoices..." /> */}
             </div>
           </ul>
           <div
