@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+
 import { BsFillBagCheckFill } from "react-icons/bs";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
@@ -8,59 +8,33 @@ import "../styles/global.css";
 import useStore from "@/app/store";
 
 const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
-  const { cart, addToCart, removeFromCart, clearCart } = useStore();
-  // const { subTotal, setSubTotal } = useStore(0);
-  // useEffect(() => {
-  //   console.log("useEffect from cart.jsx");
-  //   try {
-  //     if (localStorage.getItem("cart")) {
-  //       setCart(JSON.parse(localstorage.getItem("cart")));
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     localStorage.clear();
-  //   }
-  // }, [setCart]);
+  const { cart, addToCart, decreaseQty, removeFromCart, clearCart } = useStore();
+  function handleCheckout(e) {
+    e.preventDefault();
+    const products = cart.map((item) => ({
+      quantity: item.qty,
+      price_data: {
+        unit_amount: item.price,
+        currency: "usd",
+        product_data: {
+          name: item.name,
+          images: [item.img_url],
+          description: item.description,
+          metadata: {
+            db_id: item.id,
+          },
+        },
+      }
+    }));
+    fetch("/api/checkout_sessions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(products),
+    }).then((res) => (window.location.href = res.url));
 
-  // const saveCart = () => {
-  //   let myCart = cart;
-  //   let subt = 0;
-  //   localStorage.setItem("cart",JSON.stringify(myCart)
-  //   let keys = Object.keys(cart);
-  //   for (let i = 0; i<keys.length; i++) {
-  //     subt += myCart[keys[i]].price * myCart[keys[i]].qty;
-  //   }
-  //   setSubTotal(subt);
-  // };
-  // const addToCart = (name, itemCode, qty, price) => {
-  //   let myCart = cart;
-  //   if (itemCode in cart) {
-  //     myCart[itemCode].qty = cart[itemCode].qty + qty;
-  //   } else {
-  //     myCart[itemCode] = { qty: 1, price, name };
-  //   }
-  //   setCart(myCart);
-  //   saveCart(myCart);
-  // };
-
-  // const clearCart = () => {
-  //   setCart({});
-  //   saveCart({});
-  // };
-
-  // const removeFromCart = (name, itemCode, qty, price) => {
-  //   let newCart = cart;
-  //   if (itemCode in cart) {
-  //     newCart[itemCode].qty = cart[itemCode].qty - qty;
-  //   } else {
-  //     newCart[itemCode] = { qty: 1, price, name };
-  //   }
-  //   if (newCart[qty <= 0]) {
-  //     delete newCart[itemCode];
-  //   }
-  //   setCart(newCart);
-  //   saveCart(newCart);
-  // };
+  }
 
   return (
     <div
@@ -75,25 +49,29 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         <IoIosClose />
       </span>
       <ol className="list-decimal font-semibold">
-        {Object.keys(cart).length === 0 && (
+        {cart.length === 0 && (
           <li className="my-4 text-base font-normal block">No items</li>
         )}
-        {Object.keys(cart).map((k) => {
+        {cart.map((item) => {
           return (
-            <li key={k}>
+            <li key={item.id}>
               <div className="item flex my-5">
-                <div className="w-2/3 font-semibold">{cart[k].name}</div>
+                <div className="w-2/3 font-semibold">{item.name}</div>
                 <div className="flex font-semibold items-center justify-center w-1/3">
                   <FaMinus
                     onClick={() => {
-                      removeFromCart(k, 1, cart[k].price, cart[k].name);
+                      if (item.qty === 1) {
+                        removeFromCart(item);
+                      } else {
+                        decreaseQty(item);
+                      }
                     }}
                     className="mx-3 cursor-pointer text-pink-500"
-                  />{" "}
-                  <span className="mx-2 text-sm">{cart[k].qty}</span>
+                  />
+                  <span className="mx-2 text-sm">{item.qty}</span>
                   <FaPlus
                     onClick={() => {
-                      addToCart(k, 1, cart[k].price, cart[k].name);
+                      addToCart(item, 1, item.price, item.name);
                     }}
                     className="cursor-pointer mx-3"
                   />
@@ -104,15 +82,24 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         })}
       </ol>
       <div className="flex">
-         <form action="/api/checkout_sessions" method="POST">
-      <section>
-        <button type="submit" role="link" className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm">
-          <BsFillBagCheckFill className="m-1" />
-          Checkout
-        </button>
-      </section>
-    </form>
-        
+        <form action="/api/checkout_sessions" method="POST">
+          {cart.map((item) => (
+            <React.Fragment key={item.id}>
+              <input type="hidden" name="id" value={item.id} />
+              <input type="hidden" name="quantity" value={item.qty} />
+            </React.Fragment>
+          ))}
+          <section>
+            <button
+              type="submit"
+              role="link"
+              className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm"
+            >
+              <BsFillBagCheckFill className="m-1" />
+              Checkout
+            </button>
+          </section>
+        </form>
 
         <button
           onClick={clearCart}

@@ -40,7 +40,7 @@ export default function ProductCard({ name, price, description, img_url, id }) {
             </svg>
           </a>
           <span className="text-2xl font-bold text-gray-900 dark:text-white">
-            ${price}
+            ${price/100}
           </span>
         </div>
       </div>

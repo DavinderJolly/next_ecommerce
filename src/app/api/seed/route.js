@@ -14,7 +14,7 @@ export async function POST() {
       data: {
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
-        price: parseFloat(faker.commerce.price()),
+        price: parseInt(faker.commerce.price() * 100),
         img_url: faker.image.url(),
       },
     });
