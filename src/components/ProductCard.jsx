@@ -1,11 +1,20 @@
+"use client";
 import useStore from "@/app/store";
+import Image from "next/image";
 
 export default function ProductCard({ name, price, description, img_url, id }) {
   const { addToCart } = useStore();
   return (
     <div className="flex flex-col justify-around w-[300px] h-[500px] bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <a href="#">
-        <img className="rounded-t-lg min-w-full" src={img_url} alt="${name}" />
+        <Image
+          className="rounded-t-lg min-w-full"
+          src={img_url}
+          alt={name}
+          width={300}
+          height={200}
+          style={{ objectFit: "cover" }}
+        />
       </a>
       <div className="p-5 grow flex flex-col">
         <a href="#">
@@ -40,7 +49,7 @@ export default function ProductCard({ name, price, description, img_url, id }) {
             </svg>
           </a>
           <span className="text-2xl font-bold text-gray-900 dark:text-white">
-            ${price/100}
+            ${price / 100}
           </span>
         </div>
       </div>

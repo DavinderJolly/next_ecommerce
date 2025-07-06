@@ -5,10 +5,10 @@ import { PrismaClient } from "../../../../prisma/generated/client";
 const prisma = new PrismaClient();
 
 export async function POST() {
-//   const user = await auth();
-//   if (!user) {
-//     return new Response("Unauthorized", { status: 401 });
-//   }
+  const user = await auth();
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
   for (let i = 0; i < 10; i++) {
     await prisma.product.create({
       data: {

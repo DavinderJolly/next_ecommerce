@@ -8,7 +8,8 @@ import "../styles/global.css";
 import useStore from "@/app/store";
 
 const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
-  const { cart, addToCart, decreaseQty, removeFromCart, clearCart } = useStore();
+  const { cart, addToCart, decreaseQty, removeFromCart, clearCart } =
+    useStore();
   function handleCheckout(e) {
     e.preventDefault();
     const products = cart.map((item) => ({
@@ -24,7 +25,7 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
             db_id: item.id,
           },
         },
-      }
+      },
     }));
     fetch("/api/checkout_sessions", {
       method: "POST",
@@ -33,13 +34,12 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
       },
       body: JSON.stringify(products),
     }).then((res) => (window.location.href = res.url));
-
   }
 
   return (
     <div
       ref={ref}
-      className="w-72 sideCart  absolute top-0 right-0 bg-purple-400 px-4 py-10 transform transition-transform translate-x-full"
+      className="w-72 sideCart fixed top-0 right-0 bg-purple-400 px-6 py-10 transform transition-transform translate-x-full"
     >
       <h2 className="font-bold text-xm text-center">Shopping Cart</h2>
       <span

@@ -4,7 +4,7 @@ import { useRef } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import "../styles/global.css";
 import Cart from "./Cart";
-import Search from "./Search";
+import Image from "next/image";
 
 const NavBar = ({}) => {
   const toggleCart = () => {
@@ -26,10 +26,13 @@ const NavBar = ({}) => {
           href="https://flowbite.com/"
           className="flex items-center space-x-3 rtl:space-x-reverse"
         >
-          <img
+          <Image
             src="https://flowbite.com/docs/images/logo.svg"
+            height={32}
+            width={32}
             className="h-8"
             alt="Flowbite Logo"
+            priority
           />
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Flowbite
@@ -109,7 +112,7 @@ const NavBar = ({}) => {
           >
             <AiOutlineShoppingCart className="text-white text=x1 md:text-2xl" />
           </div>
-            <Cart ref={ref} toggleCart={toggleCart}/>
+          <Cart ref={ref} toggleCart={toggleCart} />
         </div>
       </div>
     </nav>
