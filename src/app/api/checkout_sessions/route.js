@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe.js";
 import { PrismaClient } from "../../../../prisma/generated/client";
+import { auth } from "@/auth";
 
 const prisma = new PrismaClient();
 
 export async function POST(req) {
-  console.log(req.auth);
+  const session = await auth();
+  console.log(session.user.name);
   try {
     const headersList = await headers();
     const origin = headersList.get("origin");

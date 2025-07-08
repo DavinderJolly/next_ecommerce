@@ -6,10 +6,12 @@ import { IoIosClose } from "react-icons/io";
 import React from "react";
 import "../styles/global.css";
 import useStore from "@/app/store";
+import { loadStripe } from "@stripe/stripe-js";
 
 const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } =
     useStore();
+  
   function handleCheckout(e) {
     e.preventDefault();
     const products = cart.map((item) => ({
