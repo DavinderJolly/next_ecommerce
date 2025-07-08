@@ -1,7 +1,8 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
-import { SessionProvider } from "next-auth/react";
+import Providers from "@/components/Providers";
+import { auth } from "@/auth";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -10,14 +11,15 @@ export const metadata = {
   description: "website made with nextjs and tailwindcss",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const session = await auth();
   return (
     <html lang="en">
       <body className={`${inter.className} md:h-screen`}>
-        <SessionProvider>
+        <Providers session={session}>
           <NavBar />
           {children}
-        </SessionProvider>
+        </Providers>
       </body>
     </html>
   );
