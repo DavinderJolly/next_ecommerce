@@ -1,10 +1,12 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe.js";
-import { PrismaClient } from "../../../../prisma/generated/client";
 import { auth } from "@/auth";
+import { productsTable } from "@/db/schema";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+import { eq } from "drizzle-orm";
 
-const prisma = new PrismaClient();
+const db = drizzle();
 
 export async function POST(req) {
   const session = await auth();
@@ -18,9 +20,12 @@ export async function POST(req) {
     const products = [];
 
     for (let i = 0; i < ids.length; i++) {
-      const product = await prisma.product.findUnique({
-        where: { id: parseInt(ids[i]) },
-      });
+      const product = await db
+        .select()
+        .from(productsTable)
+        .where(eq(productsTable.id, parseInt(ids[i])))
+        .limit(1);
+
       products.push({
         quantity: parseInt(qtys[i]),
         price_data: {

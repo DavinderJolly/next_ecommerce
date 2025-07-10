@@ -1,8 +1,9 @@
 import { faker } from "@faker-js/faker";
-import { auth } from "@/auth";
-import { PrismaClient } from "../../../../prisma/generated/client";
+import { productsTable } from "@/db/schema";
 
-const prisma = new PrismaClient();
+import { drizzle } from "drizzle-orm/vercel-postgres";
+
+const db = drizzle();
 
 export async function POST() {
   const user = await auth();
@@ -10,13 +11,11 @@ export async function POST() {
     return new Response("Unauthorized", { status: 401 });
   }
   for (let i = 0; i < 10; i++) {
-    await prisma.product.create({
-      data: {
-        name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
-        price: parseInt(faker.commerce.price() * 100),
-        img_url: faker.image.url(),
-      },
+    await db.insert(productsTable).values({
+      name: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      price: parseInt(faker.commerce.price() * 100),
+      img_url: faker.image.url(),
     });
   }
   return new Response("ok");

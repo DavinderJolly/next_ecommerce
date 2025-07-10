@@ -1,10 +1,11 @@
 "use server";
 
-import { PrismaClient } from "../../prisma/generated/client";
 import { redirect } from "next/navigation";
 import crypto from "crypto";
+import { drizzle } from "drizzle-orm/vercel-postgres";
+import { usersTable } from "@/db/schema";
 
-const prisma = new PrismaClient();
+const db = drizzle();
 
 export async function create_user(formdata) {
   const name = formdata.get("name");
@@ -17,12 +18,15 @@ export async function create_user(formdata) {
       .digest("hex") +
     ":" +
     salt;
-  await prisma.user.create({
-    data: {
-      name: name,
-      email: email,
-      password: password,
-    },
-  });
+
+  await db
+    .insert(usersTable)
+    .values({
+      name,
+      email,
+      password,
+    })
+    .returning();
+
   redirect("/api/auth/signin");
 }
