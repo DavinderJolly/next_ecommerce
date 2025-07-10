@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "vercel-build": "prisma generate && prisma migrate deploy && next build"
+    "vercel-build": "drizzle-kit generate && drizzle-kit push && next build"
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
