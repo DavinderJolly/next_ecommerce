@@ -6,10 +6,15 @@ import GitHubProvider from "next-auth/providers/github";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { eq } from "drizzle-orm";
 import { usersTable } from "@/db/schema";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 
 const db = drizzle();
 
 export const { auth, handlers, signIn, signOut } = NextAuth({
+  adapter: DrizzleAdapter(db),
+  session: {
+    strategy: "jwt",
+  },
   providers: [
     CredentialsProvider({
       name: "Credentials",

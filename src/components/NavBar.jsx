@@ -5,6 +5,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import "../styles/global.css";
 import Cart from "./Cart";
 import Image from "next/image";
+import Search from "./Search";
 
 const NavBar = ({}) => {
   const toggleCart = () => {
@@ -39,6 +40,7 @@ const NavBar = ({}) => {
           </span>
         </a>
         <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+          <Search placeholder="Search products..." />
           <ul className="flex flex-row mt-3 md:mt-0 space-x-2">
             <li>
               <a href="/signup">

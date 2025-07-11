@@ -45,6 +45,8 @@ const useStore = create(
           cart: [],
         })),
       subTotal: 0,
+      search: "",
+      setSearch: (search) => set(() => ({ search })),
     }),
     { name: "cartStorage", getStorage: () => localStorage }
   )
