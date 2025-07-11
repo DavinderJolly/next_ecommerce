@@ -10,6 +10,7 @@
     "vercel-build": "drizzle-kit generate && drizzle-kit push && next build"
   },
   "dependencies": {
+    "@auth/drizzle-adapter": "^1.10.0",
     "@heroicons/react": "^2.1.5",
     "@stripe/stripe-js": "^7.4.0",
     "@tanstack/react-query": "^5.81.5",
