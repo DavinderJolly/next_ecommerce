@@ -3,15 +3,15 @@
 import { BsFillBagCheckFill } from "react-icons/bs";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/global.css";
 import useStore from "@/app/store";
-import { loadStripe } from "@stripe/stripe-js";
 
 const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } =
     useStore();
-  
+  const [isClient, setIsClient] = useState(false);
+
   function handleCheckout(e) {
     e.preventDefault();
     const products = cart.map((item) => ({
@@ -38,6 +38,10 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
     }).then((res) => (window.location.href = res.url));
   }
 
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
     <div
       ref={ref}
@@ -51,46 +55,48 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         <IoIosClose />
       </span>
       <ol className="list-decimal font-semibold">
-        {cart.length === 0 && (
+        {cart.length === 0 ? (
           <li className="my-4 text-base font-normal block">No items</li>
-        )}
-        {cart.map((item) => {
-          return (
-            <li key={item.id}>
-              <div className="item flex my-5">
-                <div className="w-2/3 font-semibold">{item.name}</div>
-                <div className="flex font-semibold items-center justify-center w-1/3">
-                  <FaMinus
-                    onClick={() => {
-                      if (item.qty === 1) {
-                        removeFromCart(item);
-                      } else {
-                        decreaseQty(item);
-                      }
-                    }}
-                    className="mx-3 cursor-pointer text-pink-500"
-                  />
-                  <span className="mx-2 text-sm">{item.qty}</span>
-                  <FaPlus
-                    onClick={() => {
-                      addToCart(item, 1, item.price, item.name);
-                    }}
-                    className="cursor-pointer mx-3"
-                  />
+        ) : (
+          cart.map((item) => {
+            return (
+              <li key={item.id}>
+                <div className="item flex my-5">
+                  <div className="w-2/3 font-semibold">{item.name}</div>
+                  <div className="flex font-semibold items-center justify-center w-1/3">
+                    <FaMinus
+                      onClick={() => {
+                        if (item.qty === 1) {
+                          removeFromCart(item);
+                        } else {
+                          decreaseQty(item);
+                        }
+                      }}
+                      className="mx-3 cursor-pointer text-pink-500"
+                    />
+                    <span className="mx-2 text-sm">{item.qty}</span>
+                    <FaPlus
+                      onClick={() => {
+                        addToCart(item, 1, item.price, item.name);
+                      }}
+                      className="cursor-pointer mx-3"
+                    />
+                  </div>
                 </div>
-              </div>
-            </li>
-          );
-        })}
+              </li>
+            );
+          })
+        )}
       </ol>
       <div className="flex">
         <form action="/api/checkout_sessions" method="POST">
-          {cart.map((item) => (
-            <React.Fragment key={item.id}>
-              <input type="hidden" name="id" value={item.id} />
-              <input type="hidden" name="quantity" value={item.qty} />
-            </React.Fragment>
-          ))}
+          {isClient &&
+            cart.map((item) => (
+              <React.Fragment key={item.id}>
+                <input type="hidden" name="id" value={item.id} />
+                <input type="hidden" name="quantity" value={item.qty} />
+              </React.Fragment>
+            ))}
           <section>
             <button
               type="submit"

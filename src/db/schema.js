@@ -1,21 +1,26 @@
-import { pgTable, integer, varchar, index, text, primaryKey} from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  integer,
+  varchar,
+  index,
+  text,
+  primaryKey,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
-import { int } from "drizzle-orm/mysql-core";
+import crypto from "crypto";
 
 export const usersTable = pgTable(
-  "users",
+  "user",
   {
-    id: integer("id").primaryKey().generatedAlwaysAsIdentity({
-      name: "users_id_seq",
-      startWith: 1,
-      increment: 1,
-      minValue: 1,
-      maxValue: 2147483647,
-      cache: 1,
-    }),
-    email: varchar("email", { length: 255 }).notNull().unique(),
-    password: varchar("password", { length: 255 }),
+    id: text("id")
+      .primaryKey()
+      .$defaultFn(() => crypto.randomUUID()),
     name: varchar("name", { length: 255 }).notNull(),
+    password: varchar("password", { length: 255 }),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    emailVerified: timestamp("emailVerified", { mode: "date" }),
+    image: text("image"),
   },
   (user) => [
     index("users_email_unique")
@@ -26,7 +31,7 @@ export const usersTable = pgTable(
 export const accountsTable = pgTable(
   "account",
   {
-    userId: integer("userId")
+    userId: text("userId")
       .notNull()
       .references(() => usersTable.id, { onDelete: "cascade" }),
     type: text("type").notNull(),
@@ -73,7 +78,7 @@ export const ordersTable = pgTable("orders", {
     maxValue: 2147483647,
     cache: 1,
   }),
-  user_id: integer("user_id")
+  user_id: text("user_id")
     .references(() => usersTable.id)
     .notNull(),
   status: varchar("status", { length: 50 }).notNull().default("pending"),

@@ -41,7 +41,6 @@ export async function POST(req) {
         },
       });
     }
-    console.log(authSession.user)
     const order = {
       user_id: authSession.user.id,
       status: "pending",
@@ -52,7 +51,7 @@ export async function POST(req) {
           order_id: id,
           product_id: ids[i],
           quantity: qtys[i],
-        }) 
+        })
         .returning();
     }
     // Create Checkout Sessions from body params.

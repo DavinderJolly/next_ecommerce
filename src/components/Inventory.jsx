@@ -33,7 +33,6 @@ function Inventory() {
       return response.json();
     },
   });
-  console.log(data);
 
   function SkeletonCard() {
     return (

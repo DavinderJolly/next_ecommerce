@@ -24,7 +24,7 @@ export default function Search({ placeholder }) {
   }
 
   return (
-    <form onSubmit={handleSearch} className="relative flex flex-1 flex-shrink-0">
+    <form onSubmit={handleSearch} className="relative flex flex-1 flex-shrink-0 mr-4">
       <label htmlFor="search" className="sr-only">
         Search
       </label>
