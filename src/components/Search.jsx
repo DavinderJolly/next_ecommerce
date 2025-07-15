@@ -2,7 +2,7 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import { useSearchParams, usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
-import useStore from '../app/store';
+import useStore from '../store';
 
 export default function Search({ placeholder }) {
   const searchParams = useSearchParams();

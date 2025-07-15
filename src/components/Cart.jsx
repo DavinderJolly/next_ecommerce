@@ -5,38 +5,12 @@ import { FaMinus, FaPlus } from "react-icons/fa6";
 import { IoIosClose } from "react-icons/io";
 import React, { useState, useEffect } from "react";
 import "../styles/global.css";
-import useStore from "@/app/store";
+import useStore from "@/store";
 
 const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
   const { cart, addToCart, decreaseQty, removeFromCart, clearCart } =
     useStore();
   const [isClient, setIsClient] = useState(false);
-
-  function handleCheckout(e) {
-    e.preventDefault();
-    const products = cart.map((item) => ({
-      quantity: item.qty,
-      price_data: {
-        unit_amount: item.price,
-        currency: "usd",
-        product_data: {
-          name: item.name,
-          images: [item.img_url],
-          description: item.description,
-          metadata: {
-            db_id: item.id,
-          },
-        },
-      },
-    }));
-    fetch("/api/checkout_sessions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(products),
-    }).then((res) => (window.location.href = res.url));
-  }
 
   useEffect(() => {
     setIsClient(true);

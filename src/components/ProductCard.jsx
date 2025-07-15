@@ -1,5 +1,5 @@
 "use client";
-import useStore from "@/app/store";
+import useStore from "@/store";
 import Image from "next/image";
 
 export default function ProductCard({ name, price, description, img_url, id }) {
