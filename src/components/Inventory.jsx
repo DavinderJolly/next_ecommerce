@@ -1,7 +1,7 @@
 "use client";
 import { useQuery } from "@tanstack/react-query";
 import ProductCard from "./ProductCard";
-import { useEffect, useState, Suspense } from "react";
+import { useState } from "react";
 
 function InventoryList({ products }) {
   return products.map((product) => (

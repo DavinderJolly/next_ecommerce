@@ -29,7 +29,9 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         <IoIosClose />
       </span>
       <ol className="list-decimal font-semibold">
-        {cart.length === 0 ? (
+        {!isClient ? (
+          <li className="my-4 text-base font-normal block">Loading...</li>
+        ) : cart.length === 0 ? (
           <li className="my-4 text-base font-normal block">No items</li>
         ) : (
           cart.map((item) => {
@@ -63,26 +65,26 @@ const Cart = React.forwardRef(function Cart({ toggleCart }, ref) {
         )}
       </ol>
       <div className="flex">
-        <form action="/api/checkout_sessions" method="POST">
-          {isClient &&
-            cart.map((item) => (
+        {isClient && (
+          <form action="/api/checkout_sessions" method="POST">
+            {cart.map((item) => (
               <React.Fragment key={item.id}>
                 <input type="hidden" name="id" value={item.id} />
                 <input type="hidden" name="quantity" value={item.qty} />
               </React.Fragment>
             ))}
-          <section>
-            <button
-              type="submit"
-              role="link"
-              className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm"
-            >
-              <BsFillBagCheckFill className="m-1" />
-              Checkout
-            </button>
-          </section>
-        </form>
-
+            <section>
+              <button
+                type="submit"
+                role="link"
+                className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm"
+              >
+                <BsFillBagCheckFill className="m-1" />
+                Checkout
+              </button>
+            </section>
+          </form>
+        )}
         <button
           onClick={clearCart}
           className="flex mr-2  text-white bg-pink-500 , border-0 py-2 px-2 focus:outline-none hover:bg-pink-600 rounded text-sm"
