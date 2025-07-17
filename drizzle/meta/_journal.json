@@ -57,6 +57,13 @@
       "when": 1752277108462,
       "tag": "0007_tearful_magus",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1752792635080,
+      "tag": "0008_broken_husk",
+      "breakpoints": true
     }
   ]
 }
