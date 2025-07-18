@@ -82,6 +82,7 @@ export const ordersTable = pgTable("orders", {
     .references(() => usersTable.id)
     .notNull(),
   status: varchar("status", { length: 50 }).notNull().default("pending"),
+  created_at: timestamp("created_at", { mode: "date" }).notNull().defaultNow(),
 });
 
 export const orderItemsTable = pgTable("order_items", {

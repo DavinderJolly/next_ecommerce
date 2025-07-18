@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { headers } from "next/headers";
 import { stripe } from "@/lib/stripe.js";
 import { auth } from "@/auth";
-import { productsTable, ordersTable, orderItemsTable} from "@/db/schema";
+import { productsTable, ordersTable, orderItemsTable, usersTable } from "@/db/schema";
 import { drizzle } from "drizzle-orm/vercel-postgres";
 import { eq } from "drizzle-orm";
 
@@ -19,7 +19,7 @@ export async function POST(req) {
     const products = [];
 
     for (let i = 0; i < ids.length; i++) {
-      const product = await db
+      const [product] = await db
         .select()
         .from(productsTable)
         .where(eq(productsTable.id, parseInt(ids[i])))
@@ -41,13 +41,20 @@ export async function POST(req) {
         },
       });
     }
+
+    const user = (await db.select().from(usersTable).where(eq(usersTable.email, authSession.user.email)).limit(1))[0];
+
+    if (!user) {
+      throw new Error("User not found");
+    }
     const order = {
-      user_id: authSession.user.id,
+      user_id: user.id,
       status: "pending",
     };
-    const { id } = await db.insert(ordersTable).values(order).returning();
+
+    const { id } = (await db.insert(ordersTable).values(order).returning())[0];
     for (let i = 0; i < ids.length; i++) {
-        await db.insert(orderItemsTable).values({
+      await db.insert(orderItemsTable).values({
           order_id: id,
           product_id: ids[i],
           quantity: qtys[i],
@@ -55,6 +62,7 @@ export async function POST(req) {
         .returning();
     }
     // Create Checkout Sessions from body params.
+    console.log(products)
     const session = await stripe.checkout.sessions.create({
       line_items: products,
       mode: "payment",
